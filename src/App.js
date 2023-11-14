@@ -4,6 +4,7 @@ import { useState } from "react";
 import NavBar from "./NavBar";
 import Main from "./Main";
 
+
 const tempMovieData = [
   {
     imdbID: "tt1375666",
