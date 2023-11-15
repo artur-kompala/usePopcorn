@@ -1,17 +1,15 @@
 import { useState } from "react";
-export default function Main({movies,tempWatchedData}){
+export default function Main({movies,tempWatchedData,isLoading}){
     const [watched, setWatched] = useState(tempWatchedData);
     return(
         <main className="main">
             <Box>
-              <MovieList movies={movies}></MovieList>
+              {isLoading ?<Loader></Loader> : <MovieList movies={movies}></MovieList>}
             </Box>
             <Box>
               <Summary watched={watched}></Summary>
               <WatchedMovieList watched={watched}></WatchedMovieList>
             </Box>
-            
-        
         </main>
     )
 }
@@ -111,5 +109,10 @@ function Box({children}){
         </button>
         {isOpen && children}
       </div>
+  )
+}
+function Loader(){
+  return(
+    <div class="loader"></div>
   )
 }

@@ -1,6 +1,5 @@
 import './App.css';
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavBar from "./NavBar";
 import Main from "./Main";
 
@@ -52,17 +51,29 @@ const tempWatchedData = [
   },
 ];
 
-
+const KEY = '8115ebbd';
+const query = 'my little pony'
 
 export default function App() {
 
-  const [movies, setMovies] = useState(tempMovieData);
- 
+  const [movies, setMovies] = useState([]);
+  const [isLoading,setIsLoading] = useState(false)
+  useEffect(()=>{
+    setIsLoading(true);
+    async function fetchMovies(){
+      const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`)
+      const data = await res.json()
+      setMovies(data.Search);
+      setIsLoading(false);
+    }
+    fetchMovies();
+  },[])
+  
 
   return (
     <>
       <NavBar movies={movies} ></NavBar>
-      <Main movies={movies} tempWatchedData={tempWatchedData}></Main>
+      <Main movies={movies} tempWatchedData={tempWatchedData} isLoading={isLoading}></Main>
     </>
   );
 }
