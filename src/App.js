@@ -52,28 +52,48 @@ const tempWatchedData = [
 ];
 
 const KEY = '8115ebbd';
-const query = 'my little pony'
 
 export default function App() {
-
+  const [query, setQuery] = useState("rambo");
   const [movies, setMovies] = useState([]);
   const [isLoading,setIsLoading] = useState(false)
+  const [error, setError] = useState("")
+  
+
   useEffect(()=>{
-    setIsLoading(true);
     async function fetchMovies(){
+    try {
+      setIsLoading(true);
+      setError('')
       const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`)
+      if(!res.ok) throw new Error("Smoething went wrong with fetching movies")
+      
       const data = await res.json()
+      if(data.Response === 'False')throw new Error('Movie not found')
       setMovies(data.Search);
+      
+      
+    } catch (err) {
+      setError(err.message)
+    } finally{
       setIsLoading(false);
     }
-    fetchMovies();
-  },[])
+  }
+  if(query.length < 3){
+   setMovies([]);
+   setError("");
+   return
+  }
+  fetchMovies();
+    
+  },[query])
   
 
   return (
     <>
-      <NavBar movies={movies} ></NavBar>
-      <Main movies={movies} tempWatchedData={tempWatchedData} isLoading={isLoading}></Main>
+      <NavBar movies={movies} query={query} setQuery={setQuery}></NavBar>
+      <Main movies={movies} tempWatchedData={tempWatchedData} isLoading={isLoading} error={error}></Main>
     </>
   );
 }
+

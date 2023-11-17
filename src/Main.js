@@ -1,32 +1,43 @@
 import { useState } from "react";
-export default function Main({movies,tempWatchedData,isLoading}){
+export default function Main({movies,tempWatchedData,isLoading,error}){
     const [watched, setWatched] = useState(tempWatchedData);
+    const [selectedId,setSelectedId] = useState("")
+    
     return(
         <main className="main">
             <Box>
-              {isLoading ?<Loader></Loader> : <MovieList movies={movies}></MovieList>}
+              {isLoading && <Loader></Loader>}
+              {!isLoading && !error && <MovieList movies={movies} setSelectedId={setSelectedId}></MovieList>}
+              {error && <ErrorMessage message={error}></ErrorMessage>}
             </Box>
             <Box>
+              {selectedId ? <MovieDetails selectedId={selectedId} setSelectedId={setSelectedId}></MovieDetails> : 
+              <>
               <Summary watched={watched}></Summary>
               <WatchedMovieList watched={watched}></WatchedMovieList>
+              </>
+              }
             </Box>
         </main>
     )
 }
 
-function MovieList({movies}){
+function MovieList({movies,setSelectedId}){
     return(
-        <ul className="list">
+        <ul className="list list-movies">
               {movies?.map((movie) => (
-                <Movie movie={movie}></Movie>
+                <Movie movie={movie} setSelectedId={setSelectedId}></Movie>
                 ))}
         </ul>
     )
 
 }
-function Movie({movie}){
+function Movie({movie,setSelectedId}){
+    function handleSelect(id){
+        setSelectedId(id);
+    }
     return(
-        <li key={movie.imdbID}>
+        <li key={movie.imdbID} onClick={()=>handleSelect(movie.imdbID)}>
                   <img src={movie.Poster} alt={`${movie.Title} poster`} />
                   <h3>{movie.Title}</h3>
                   <div>
@@ -114,5 +125,22 @@ function Box({children}){
 function Loader(){
   return(
     <div class="loader"></div>
+  )
+}
+function ErrorMessage({message}){
+  return (
+  <p className='error'>😖😖😖 {message}</p>
+  )
+}
+function MovieDetails({selectedId ,setSelectedId}){
+  function handleClose(){
+    setSelectedId(null)
+  }
+  return(
+    <>
+    <button className="btn-back" onClick={handleClose}>✕</button>
+    <div className="details">{selectedId}</div>
+    </>
+    
   )
 }
