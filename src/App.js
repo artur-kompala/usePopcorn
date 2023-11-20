@@ -92,7 +92,7 @@ export default function App() {
   return (
     <>
       <NavBar movies={movies} query={query} setQuery={setQuery}></NavBar>
-      <Main movies={movies} tempWatchedData={tempWatchedData} isLoading={isLoading} error={error}></Main>
+      <Main movies={movies} tempWatchedData={tempWatchedData} isLoading={isLoading} error={error} KEY={KEY}></Main>
     </>
   );
 }
