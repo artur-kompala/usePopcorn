@@ -169,10 +169,22 @@ function MovieDetails({selectedId ,setSelectedId,KEY,handleAddWatchedMovie,watch
     handleAddWatchedMovie(newMovie);
     handleClose()
   }
+
   function handleClose(){
     setSelectedId(null)
+    console.log("CLOSE");
   }
-  
+
+
+  useEffect(()=>{
+      function callback(e){
+        if (e.key === "Escape") {
+          handleClose();
+        }
+      }
+      document.addEventListener("keyup", callback)
+      return ()=>document.removeEventListener('keyup',callback); 
+  },[])
   useEffect(()=>{
     
     async function getMovieDetails(){
@@ -195,7 +207,6 @@ function MovieDetails({selectedId ,setSelectedId,KEY,handleAddWatchedMovie,watch
   useEffect(()=>{
     if(!title) return;
     document.title=`Movie ${title}`
-    console.log(title);
     return ()=>document.title = 'usePopcorn'
   },[title]);
   
