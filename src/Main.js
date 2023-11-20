@@ -174,6 +174,7 @@ function MovieDetails({selectedId ,setSelectedId,KEY,handleAddWatchedMovie,watch
   }
   
   useEffect(()=>{
+    
     async function getMovieDetails(){
       try {
         setIsLoading(true)
@@ -190,6 +191,13 @@ function MovieDetails({selectedId ,setSelectedId,KEY,handleAddWatchedMovie,watch
     }
     getMovieDetails();
   },[KEY, selectedId])
+
+  useEffect(()=>{
+    if(!title) return;
+    document.title=`Movie ${title}`
+    console.log(title);
+    return ()=>document.title = 'usePopcorn'
+  },[title]);
   
   return(
     <div className="details">
