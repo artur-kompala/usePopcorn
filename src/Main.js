@@ -8,8 +8,10 @@ export default function Main({movies,isLoading,error,KEY}){
       if(movie !== undefined){
         setWatched(watched=>[...watched,movie])
       }
-      
     }
+    function handleOnDeleteMovie(id){
+      setWatched(watched => watched.filter(movie => movie.imdbID !== id))
+  }
     return(
         <main className="main">
             <Box>
@@ -18,10 +20,10 @@ export default function Main({movies,isLoading,error,KEY}){
               {error && <ErrorMessage message={error}></ErrorMessage>}
             </Box>
             <Box>
-              {selectedId ? <MovieDetails handleAddWatchedMovie={handleAddWatchedMovie} selectedId={selectedId} setSelectedId={setSelectedId} KEY={KEY} watched={watched}></MovieDetails> : 
+              {selectedId ? <MovieDetails setWatched={setWatched} handleAddWatchedMovie={handleAddWatchedMovie} selectedId={selectedId} setSelectedId={setSelectedId} KEY={KEY} watched={watched}></MovieDetails> : 
               <>
               <Summary watched={watched}></Summary>
-              <WatchedMovieList watched={watched}></WatchedMovieList>
+              <WatchedMovieList watched={watched} onDelete={handleOnDeleteMovie}></WatchedMovieList>
               </>
               }
             </Box>
@@ -33,13 +35,13 @@ function MovieList({movies,setSelectedId,selectedId}){
     return(
         <ul className="list list-movies">
               {movies?.map((movie) => (
-                <Movie movie={movie} setSelectedId={setSelectedId} selectedId={selectedId}></Movie>
+                <Movie movie={movie} setSelectedId={setSelectedId} selectedId={selectedId} KEY={movie.imdbID}></Movie>
                 ))}
         </ul>
     )
 
 }
-function Movie({movie,setSelectedId,selectedId}){
+function Movie({movie,setSelectedId,selectedId,KEY}){
     function handleSelect(id){
         if(id === selectedId){
           setSelectedId(null)
@@ -48,7 +50,7 @@ function Movie({movie,setSelectedId,selectedId}){
         setSelectedId(id);
     }
     return(
-        <li key={movie.imdbID} onClick={()=>handleSelect(movie.imdbID)}>
+        <li key={KEY} onClick={()=>handleSelect(movie.imdbID)}>
                   <img src={movie.Poster} alt={`${movie.Title} poster`} />
                   <h3>{movie.Title}</h3>
                   <div>
@@ -92,7 +94,7 @@ function Summary({watched}){
     )
 }
 
-function WatchedMovieList({watched}){
+function WatchedMovieList({watched,onDelete}){
   
   return(
     <ul className="list">
@@ -113,6 +115,7 @@ function WatchedMovieList({watched}){
                         <span>⏳</span>
                         <span>{movie.runtime} min</span>
                       </p>
+                      <button className="btn-delete" onClick={()=>onDelete(movie.imdbID)}>X</button>
                     </div>
                   </li>
                 ))}
@@ -136,7 +139,7 @@ function Box({children}){
 }
 function Loader(){
   return(
-    <div class="loader"></div>
+    <div className="loader"></div>
   )
 }
 function ErrorMessage({message}){
@@ -144,14 +147,14 @@ function ErrorMessage({message}){
   <p className='error'>😖😖😖 {message}</p>
   )
 }
-function MovieDetails({selectedId ,setSelectedId,KEY,handleAddWatchedMovie,watched}){
+function MovieDetails({selectedId ,setSelectedId,KEY,handleAddWatchedMovie,watched,setWatched}){
   const [movie,setMovie] = useState({})
   const [isLoading,setIsLoading] = useState(false)
   const [userRating, setUserRating] = useState("");
   const {Title: title, Year : year,Poster: poster, Runtime: runtime, imdbRating,Plot :plot ,Relased: relased, Actors: actors,Director: director, Genre: genre} = movie;
   
   const isWatched = watched.map(movie=>movie.imdbID).includes(selectedId)
-  console.log(isWatched);
+  
   function handleAdd(){
     const newMovie = {
       imdbID: selectedId,
@@ -186,7 +189,7 @@ function MovieDetails({selectedId ,setSelectedId,KEY,handleAddWatchedMovie,watch
       }
     }
     getMovieDetails();
-  },[selectedId])
+  },[KEY, selectedId])
   
   return(
     <div className="details">
