@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import StarRating from "./StarRating";
 import { useLocalStorageState } from "./useLocalStorageState";
+import { useKey } from "./useKey";
 export default function Main({movies,isLoading,error,KEY}){
     
     const [selectedId,setSelectedId] = useState("")
@@ -9,7 +10,6 @@ export default function Main({movies,isLoading,error,KEY}){
       if(movie !== undefined){
         setWatched(watched=>[...watched,movie])
       }
-      //localStorage.setItem('watched',JSON.stringify([...watched,movie]))
     }
     function handleOnDeleteMovie(id){
       setWatched(watched => watched.filter(movie => movie.imdbID !== id))
@@ -181,15 +181,7 @@ function MovieDetails({selectedId ,setSelectedId,KEY,handleAddWatchedMovie,watch
   }
 
 
-  useEffect(()=>{
-      function callback(e){
-        if (e.key === "Escape") {
-          handleClose();
-        }
-      }
-      document.addEventListener("keyup", callback)
-      return ()=>document.removeEventListener('keyup',callback); 
-  },[])
+  useKey("Escape",handleClose)
 
   useEffect(()=>{
     

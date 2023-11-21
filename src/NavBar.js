@@ -1,4 +1,5 @@
 import { useEffect, useRef,useState } from "react";
+import { useKey } from "./useKey";
 
 export default function NavBar({movies,query,setQuery}){
     
@@ -16,16 +17,10 @@ function Search({query,setQuery}){
       inputEl.current.focus()
     },[])
     
-    useEffect(()=>{
-      function callback(e){
-        if (e.key === "Enter") {
-          inputEl.current.focus()
-          setQuery("")
-        }
-      }
-      document.addEventListener("keyup", callback)
-      return ()=>document.removeEventListener('keyup',callback); 
-    },[setQuery])
+    useKey("Enter",()=>{
+      inputEl.current.focus()
+      setQuery("")
+    })
 
     return(
         <input
