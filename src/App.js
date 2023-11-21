@@ -6,7 +6,7 @@ import Main from "./Main";
 const KEY = '8115ebbd';
 
 export default function App() {
-  const [query, setQuery] = useState("rambo");
+  const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [isLoading,setIsLoading] = useState(false)
   const [error, setError] = useState("")
