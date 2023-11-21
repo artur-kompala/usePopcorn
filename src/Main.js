@@ -194,6 +194,7 @@ function MovieDetails({selectedId ,setSelectedId,KEY,handleAddWatchedMovie,watch
       document.addEventListener("keyup", callback)
       return ()=>document.removeEventListener('keyup',callback); 
   },[])
+  
   useEffect(()=>{
     
     async function getMovieDetails(){
