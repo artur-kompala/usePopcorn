@@ -1,5 +1,6 @@
 # Photo
 ![Alt text](/img/ss1.png)
+![Alt text](/img/ss2.png)
 
 
 
