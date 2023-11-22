@@ -1,8 +1,10 @@
+# Description
+
+The application is designed for searching movies that have already been watched, with the ability to add them to a list that takes into account user ratings for each film. Additionally, it tracks the time spent on watching movies and provides details about the searched films.
+
 # Photo
 ![Alt text](/img/ss1.png)
 ![Alt text](/img/ss2.png)
-
-
 
 # Getting Started with Create React App
 
