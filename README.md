@@ -1,5 +1,5 @@
 # Photo
-<img  src="https://github.com/artur-kompala/usePopcorn/tree/main/img/ss1.png"></img>
+![Alt text](/img/ss1.png)
 
 
 
